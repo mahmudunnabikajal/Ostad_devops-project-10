@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ostad-project-10-rolling
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ostad-project-10-rolling
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: ostad-project-10-rolling
+    spec:
+      containers:
+        - name: app
+          image: mahmudunnabikajal/ostad-project-10:latest
+          env:
+            - name: VERSION
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['version']
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 2
+            periodSeconds: 2

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ostad-project-10-blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: ostad-project-10
+      color: blue
+  template:
+    metadata:
+      labels:
+        app: ostad-project-10
+        color: blue
+    spec:
+      containers:
+        - name: app
+          image: mahmudunnabikajal/ostad-project-10:v1
+          env:
+            - name: VERSION
+              value: "v1"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 2
+            periodSeconds: 2

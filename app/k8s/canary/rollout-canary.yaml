@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: ostad-project-10-canary
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: ostad-project-10-canary
+  template:
+    metadata:
+      labels:
+        app: ostad-project-10-canary
+    spec:
+      containers:
+        - name: app
+          image: mahmudunnabikajal/ostad-project-10:latest
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 2
+            periodSeconds: 2
+  strategy:
+    canary:
+      steps:
+        - setWeight: 10
+        - pause: { duration: 20s }
+        - setWeight: 50
+        - pause: { duration: 20s }
+        - setWeight: 100
