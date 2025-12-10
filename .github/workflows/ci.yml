@@ -18,6 +18,6 @@ jobs:
       - name: Build and push v${{ github.sha }}
         run: |
           IMAGE=${{ secrets.DOCKERHUB_USERNAME }}/ostad-project-10
-          docker build -t $IMAGE:latest -t $IMAGE:${{ github.sha }} .
+          docker build -t $IMAGE:latest -t $IMAGE:${{ github.sha }} ./app
           docker push $IMAGE:latest
           docker push $IMAGE:${{ github.sha }}
